@@ -7,6 +7,7 @@ import "./components/Navbar/nav.scss";
 import { Route, Router, Routes } from "react-router-dom";
 import Shop from "./components/Shop/shop";
 import Shoppingcart from "./components/ShoppingCart/ShoppinCart";
+import Cart from "./components/addcard/Card";
 function App() {
   return (
     <>

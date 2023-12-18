@@ -5,7 +5,11 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "./nav.scss";
 import logo from "../../acsset/img/food 2.png";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Redux_tokit/store";
 function Navbarr() {
+  const addtocart = useSelector((state: RootState) => state.todo.cardlist);
+
   return (
     <Navbar expand="lg">
       <Container>
@@ -28,7 +32,10 @@ function Navbarr() {
 
             <Nav.Link href="#link">Đơn Hàng</Nav.Link>
             <NavLink to={"/store"} className={"nav-link "}>
-              Cửa Hàng
+              Liên <h6></h6>ệ
+            </NavLink>
+            <NavLink to={"/store"} className={"nav-link "}>
+              Tin Tức
             </NavLink>
           </Nav>
           <Navbar.Collapse className="navleft justify-content-end">
@@ -38,7 +45,7 @@ function Navbarr() {
             </Navbar.Text>
             <NavLink to={"/cart"} className="me-4 nav-link ">
               <i className="fa-solid fa-bag-shopping cart_icon"></i>
-              <span className="length_product">1</span>
+              <span className="length_product">{addtocart.length}</span>
             </NavLink>
             <Navbar.Text className="me-4">
               <i className="fa-solid fa-right-to-bracket"></i>

@@ -34,6 +34,7 @@ import muc from "../assets/Haisan/Muc.jpg";
 import tepRang from "../assets/Haisan/teprang.png";
 import tomCang from "../assets/Haisan/TomCang.jpg";
 import tomSu from "../assets/Haisan/TomSu.jpg";
+
 export const initListproduct: list[] = [
   // Món Heo
   {
@@ -314,3 +315,5 @@ export const initListproduct: list[] = [
     gia: "250.000",
   },
 ];
+
+export const card: list[] = [];

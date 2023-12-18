@@ -7,7 +7,6 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter } from "react-router-dom";
 import store from "./Redux_tokit/store";
-
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
