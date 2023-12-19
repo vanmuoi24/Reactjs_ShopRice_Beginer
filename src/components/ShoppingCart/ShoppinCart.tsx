@@ -2,35 +2,49 @@ import { Col, Row, Card, Button, Form } from "react-bootstrap";
 import { RootState } from "../../Redux_tokit/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Value } from "sass";
-import { upqualitycard } from "../../Redux_tokit/Rootreducer";
-import { list } from "../../Redux_tokit/Type";
+import { deleteitemcard } from "../../Redux_tokit/Rootreducer";
+import Modal from "react-bootstrap/Modal";
 const Shoppingcart = () => {
   let dispath = useDispatch();
   const addtocart = useSelector((state: RootState) => state.todo.cardlist);
   const [inputValues, setInputValues] = useState<number[]>([]);
-  const [priceitem, setpriceitem] = useState<number>();
+  const [total, settotal] = useState<number>();
+  const [show, setShow] = useState<boolean>(false);
+  const [idcard, setidcard] = useState<number>();
   useEffect(() => {
     setInputValues(addtocart.map(() => 1));
   }, [addtocart]);
+  useEffect(() => {
+    const totalPrice = addtocart.reduce((accumulator, currentItem, index) => {
+      return accumulator + parseFloat(currentItem.gia) * inputValues[index];
+    }, 0);
+    settotal(totalPrice);
+  }, [inputValues, addtocart]);
 
   const handleStepUp = (index: number) => {
     const newInputValues = [...inputValues];
     newInputValues[index]++;
-
-    const price = parseFloat(addtocart[index].gia) * newInputValues[index];
     setInputValues(newInputValues);
-    setpriceitem(price);
   };
 
   const handleStepdown = (index: number) => {
     const newInputValues = [...inputValues];
-    if (newInputValues[index] > 0) {
+    if (newInputValues[index] > 1) {
       newInputValues[index]--;
       setInputValues(newInputValues);
     }
   };
-
+  const handledelete = (value: number) => {
+    setShow(true);
+    setidcard(value);
+  };
+  const handleClose = () => setShow(false);
+  const handlecomfirm = () => {
+    if (typeof idcard !== "undefined") {
+      dispath(deleteitemcard(idcard));
+      setShow(false);
+    }
+  };
   return (
     <section className="h-100 gradient-custom">
       <div className="container py-5">
@@ -57,7 +71,7 @@ const Shoppingcart = () => {
                         <span className="float-md-start ">
                           Giá tiền :
                           <span className=" fw-bolder ">
-                            {parseFloat(item.gia) * inputValues[index]}
+                            {parseFloat(item.gia) * inputValues[index]}$
                           </span>
                         </span>
                       </div>
@@ -69,10 +83,9 @@ const Shoppingcart = () => {
                       >
                         <i className="fas fa-minus"></i>
                       </button>
-
                       <input
                         id="form1"
-                        min="0"
+                        min="1"
                         name="quantity"
                         value={inputValues[index]}
                         type="number"
@@ -86,9 +99,13 @@ const Shoppingcart = () => {
                         <i className="fas fa-plus"></i>
                       </button>
                       <div style={{ width: "80px" }}>
-                        <h5 className="mb-0"></h5>
+                        <h5 className="mb-0">action</h5>
                       </div>
-                      <a href="#!" style={{ color: "#cecece" }}>
+                      <a
+                        href="#!"
+                        style={{ color: "black" }}
+                        onClick={(event) => handledelete(item.id)}
+                      >
                         <i className="fas fa-trash-alt"></i>
                       </a>
                     </Col>
@@ -101,7 +118,7 @@ const Shoppingcart = () => {
                 <p>
                   <strong>Expected shipping delivery</strong>
                 </p>
-                <p className="mb-0">12.10.2020 - 14.10.2020</p>
+                <p className="mb-0">12.10.2023 - 14.10.2023</p>
               </Card.Body>
             </Card>
             <Card className="mb-0">
@@ -122,7 +139,7 @@ const Shoppingcart = () => {
                 <ul className="list-group list-group-flush">
                   <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                     Products
-                    <span>$53.98</span>
+                    <span>{total}$</span>
                   </li>
                   <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                     Shipping
@@ -136,7 +153,7 @@ const Shoppingcart = () => {
                       </strong>
                     </div>
                     <span>
-                      <strong>$53.98</strong>
+                      <strong>{total}$</strong>
                     </span>
                   </li>
                 </ul>
@@ -148,6 +165,22 @@ const Shoppingcart = () => {
           </Col>
         </Row>
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Are you sure to delete the product?</h4>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button className=" bg-danger " onClick={handlecomfirm}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </section>
   );
 };

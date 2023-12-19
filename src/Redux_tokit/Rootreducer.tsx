@@ -12,20 +12,18 @@ const initState: Productlist = {
 };
 
 export const addtocard = createAction<list>("addtocard");
-export const upqualitycard = createAction<number>("upqualitycard ");
-export const downqualitycard = createAction<list>("downqualitycard");
+export const deleteitemcard = createAction<number>("deleteitemcard ");
 
 const todoreucer = createReducer(initState, (buider) => {
   buider.addCase(addtocard, (state, action) => {
     const post = action.payload;
     state.cardlist.push(post);
   });
-  buider.addCase(upqualitycard, (state, action) => {
-    console.log(action);
-    const filterindex = state.cardlist.map((list, index) => {
-      if (list.id === action.payload) {
-      }
-    });
+
+  buider.addCase(deleteitemcard, (state, action) => {
+    const postId = action.payload;
+    const updatedCartList = state.cardlist.filter((item) => item.id !== postId);
+    state.cardlist = updatedCartList;
   });
 });
 export default todoreucer;

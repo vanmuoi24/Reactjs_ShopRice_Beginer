@@ -32,7 +32,7 @@ function Navbarr() {
 
             <Nav.Link href="#link">Đơn Hàng</Nav.Link>
             <NavLink to={"/store"} className={"nav-link "}>
-              Liên <h6></h6>ệ
+              Liên Hệ
             </NavLink>
             <NavLink to={"/store"} className={"nav-link "}>
               Tin Tức
