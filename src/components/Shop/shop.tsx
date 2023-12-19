@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./shop.scss";
 import { addtocard } from "../../Redux_tokit/Rootreducer";
+import ResponsivePagination from "react-responsive-pagination";
+
 export interface post {
   id: number;
   masp: string;
@@ -20,12 +22,19 @@ function Shop() {
   let dispath = useDispatch();
   const dataproduct = useSelector((state: RootState) => state.todo.postlist);
   const addtocart = useSelector((state: RootState) => state.todo.cardlist);
-
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 8;
   const handleAddToCart = (item: post) => {
     dispath(addtocard(item));
     toast.success("Đã Thêm Vò Giỏ Hàng");
   };
-  console.log(addtocart);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = dataproduct.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePaginationChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
   return (
     <>
       <section style={{ backgroundColor: "#eee" }}>
@@ -35,7 +44,7 @@ function Shop() {
             <strong>Cửa Hàng</strong>
           </h4>
           <Row>
-            {dataproduct.map((item, index) => (
+            {currentItems.map((item, index) => (
               <Col lg={3} md={6} className="mb-4" key={index}>
                 <Card className="product-grid">
                   <div className="product-image">
@@ -67,6 +76,11 @@ function Shop() {
               </Col>
             ))}
           </Row>
+          <ResponsivePagination
+            current={currentPage}
+            total={Math.ceil(dataproduct.length / itemsPerPage)}
+            onPageChange={handlePaginationChange}
+          />
         </Container>
         <ToastContainer
           position="top-right"
